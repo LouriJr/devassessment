@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Xunit;
-using FluentAssertions;
 
 namespace Graph.Tests
 {

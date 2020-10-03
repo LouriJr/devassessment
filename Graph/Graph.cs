@@ -41,7 +41,7 @@ namespace Graph
 
 		private IList<T> SearchTarget(T source, T target, IList<T> actualPath)
 		{
-			if (actualPath.Where(e => e.Equals(source)).Count() > 0) //Elemento já visitado
+			if (HasNodeBeenVisited(source, actualPath))
 				return null;
 
 			actualPath.Add(source);
@@ -49,22 +49,21 @@ namespace Graph
 			if (source.Equals(target))
 				return actualPath;
 
-			else if (_nodesConnections.TryGetValue(source, out IEnumerable<T> sourceConnections))
+			if (_nodesConnections.TryGetValue(source, out IEnumerable<T> sourceConnections))
 			{
-				var possiblePath = new List<T>();
-
 				foreach (var sourceConnection in sourceConnections)
 				{
-					var sourceConnectionPath = (List<T>)SearchTarget(sourceConnection, target, actualPath);
+					var sourceConnectionPath = SearchTarget(sourceConnection, target, actualPath);
 
 					if (sourceConnectionPath != null)
 						return sourceConnectionPath;
 				}
-
-				return possiblePath;
 			}
 
 			return null;
 		}
+
+		private bool HasNodeBeenVisited(T source, IList<T> actualPath)
+			=> actualPath.Where(e => e.Equals(source)).Any();
 	}
 }
